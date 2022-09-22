@@ -12,21 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Linter installation
-        run: |
-          npm install -g markdownlint-cli
-        shell: bash
-
-      - name: Print markdownlint version
-        run: |
-          echo $(markdownlint -V)
-        shell: bash
-
-      - name: Lint the section markdown
-        continue-on-error: true
-        run: |
-          markdownlint ${{ inputs.dir }}/*.md -o tmp.txt
-        shell: bash
+      - name: Call markdown linter
+        id: lint
+        uses: ./.github/actions/markdown-linter
         with:
           dir: ${{ inputs.dir }}
 
@@ -37,12 +25,10 @@ jobs:
           github-token: $GITHUB_TOKEN
           result-encoding: string
           script: |
-            const fs = require('fs').promises;
-            var reportBulk = (await fs.readFile("tmp.txt")).toString();
             const output = `### Lint 📖
             <details>
             \`\`\`
-            `+reportBulk+`
+            `+${{ steps.lint.output.report }}+`
             \`\`\`
             </details>`
             return output;
