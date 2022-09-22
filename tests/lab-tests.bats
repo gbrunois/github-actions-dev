@@ -6,17 +6,17 @@ setup() {
   load "$DIR/test_helper/bats-assert/load"
 }
 
-@test "this is a test" {
+@test "addition" {
   run addition.sh 5 5
   assert_output 10
 }
 
-@test "this is a test" {
-  run addition.sh
+@test "missing arf" {
+  run addition.sh 5
   assert_output "missing arg throw an error"
 }
 
-@test "this is a test" {
+@test "failure" {
   run addition.sh 3
-  assert_output 3
+  assert_failure 3
 }
