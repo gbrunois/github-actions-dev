@@ -14,7 +14,7 @@ jobs:
 
       - name: Call markdown linter
         id: lint
-        uses: ./.github/actions/markdown-linter
+        uses: ./.github/actions/markdown-linter.yaml
         with:
           dir: ${{ inputs.dir }}
 
