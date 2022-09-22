@@ -24,7 +24,7 @@ async function run() {
     }
 
 
-    await Promise.all(files.map(file => handleFile));
+    await Promise.all(files.map(handleFile));
   }
   catch (error) {
     core.setFailed(error.message);
