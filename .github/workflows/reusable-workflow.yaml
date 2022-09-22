@@ -4,6 +4,8 @@ on:
       dir:
         required: true
         type: string
+jobs:
+  check-markdown:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
