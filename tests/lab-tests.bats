@@ -7,5 +7,6 @@ setup() {
 }
 
 @test "this is a test" {
-
+  run addition.sh 5 5
+  assert_output 10
 }
