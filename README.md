@@ -1,48 +1,64 @@
-# Lab 2
+# Lab 1
 
-Test an **Action** using a GitHub Action **workflow**.
+Use **reusable workflow** and **action** to improve **maintainability** of a workflow.
 
 ## Tips
 
-- [test](https://www.man-linux-magique.net/man1/test.html) command
+- [Reusable Workflow](https://docs.github.com/en/actions/using-workflows/reusing-workflows) documentation
+- [Composite Action](https://docs.github.com/en/actions/creating-actions/creating-a-composite-action) documentation
+- GitHub Action [Matrix](https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs) syntax
 
 ## Setup
 
 Create a repository with the content of this folder.
 
-`testing-workflow.yaml` will run and do **nothing** (yet).
+`workflow.yaml` will run and validate the markdown of the documentation sections sequentially.
 
-![setup result](../assets/images/testing-lab2-setup-result.png)
+![setup result](../assets/images/reuse-lab1-maintainability.png)
 
-## Steps
+## Initiate a pull request
 
-- Create a repository
-- Add the file `release-workflow.yml` which will serve you to run the lab
-- update `testing-workflow.yml` to test that our action output the following value : 
-  - `4 + 5` equals 9 
-  - `ab` + `cd` equals 0
-  - the hello-world script return `Hello World!`
-  - `kayak` is a palindrome 
-  - `foo` is not a palindrome 
+The workflow work on a `pull_request` trigger,
 
-## Test the addition part
+- Update some markdown and create a Pull request to check if your new markdown pass the linter validation.
 
-- Run the action to add `4` to `5` and test the `addition` output to be equals to `9`
-- Run the action to add `ab` to `bc` and test that the action run have fail
+## Introduce a Matrix to the workflow
 
-## Test the hello-world part
+Watching the workflow, you may see some redunduncies,
 
-- Run the action and test the `hello world` output to be equals to `Hello World!`
+- Remove unneccessary link between job
+- Introduce a matrix to replace the duplication of code
 
-## Test the palindrome part
+## Extract code to a reusable worklow
 
-- Run the action with `kayak` and test the `palindrome` output to be equals to `kayak is a palindrome`
-- Run the action with `foo` and test the `palindrome` output to be equals to `foo is not a palindrome`
+> One team of your entreprise want to copy your workflow to validate its documentation.
+
+Split the configuration of the documentation validation from the documentation validation itself.
+
+- The reusable workflow take as input the directory to check
+
+This way, the team and yours will share the same process without duplication
+
+## Extract lint into a action
+
+> Another team want to check its documentation markdown but not in the same process as yours.
+
+Extract the markdown lint process into an action named `markdown-linter`
+
+- The action take as input the directory to lint
+- The action output the linter report without transformation
+- The reusable workflow use the action instead of the markdown lint step
+- The reusable workflow use the report to prepare the comment message
+
+This way, any team can check markdown file and act on it in theirs own way.
 
 ## Finish
 
-`testing-workflow.yaml` will run the 5 tests without failure and display a warning for the `error` test case
+- `workflow.yaml` will run and validate the markdown of the documentation sections in parallel.
 
-![finish result](../assets/images/testing-lab2-finish-result.png)
+  ![finish result](../assets/images/testing-lab1-finish-result.png)
 
-Use the `testing-workflow.yaml` from the [solution](https://github.com/sfeir-open-source/sfeir-school-github-action-dev/tree/main/steps/30-testing-lab2-action-workflow-testing-solution) to compare it with your solution.
+- `reusable-workflow.yaml` will be reusable by other teams with the same process.
+- `markdown-linter` action will be usable by other teams with a different process.
+
+Use the `workflow.yaml`, the `reusable-workflow.yaml`, and the `action.yaml` from the [solution](https://github.com/sfeir-open-source/sfeir-school-github-action-dev/tree/main/steps/40-reuse-lab1-maintainability-solution) to compare it with your solution.
