@@ -1,64 +1,58 @@
 # Lab 1
 
-Use **reusable workflow** and **action** to improve **maintainability** of a workflow.
+Create a new repository and **release it**, then **publish it** to the marketplace.
 
 ## Tips
 
-- [Reusable Workflow](https://docs.github.com/en/actions/using-workflows/reusing-workflows) documentation
-- [Composite Action](https://docs.github.com/en/actions/creating-actions/creating-a-composite-action) documentation
-- GitHub Action [Matrix](https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs) syntax
+- [Semantic Release Action](https://github.com/cycjimmy/semantic-release-action)
+- GitHub Action workflow syntax : [needs](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idneeds)
+- [Publishing to the marketplace](https://docs.github.com/en/actions/creating-actions/publishing-actions-in-github-marketplace)
 
 ## Setup
 
 Create a repository with the content of this folder.
 
-`workflow.yaml` will run and validate the markdown of the documentation sections sequentially.
+`release-workflow.yaml` will run but do **NOT** generate a release.
 
-![setup result](../assets/images/reuse-lab1-maintainability.png)
+![setup result](../assets/images/lifecycle-lab1-setup-result.png)
 
-## Initiate a pull request
+## Release it
 
-The workflow work on a `pull_request` trigger,
+- Create a second job `release` which needs the `testing` job to be successful
+- Run the `semantic release` throught its action on repository sources
 
-- Update some markdown and create a Pull request to check if your new markdown pass the linter validation.
+⚠️ Be vigilant on the default branch naming, semantic release only accept a set of branches to run on.
 
-## Introduce a Matrix to the workflow
+## Publish it
 
-Watching the workflow, you may see some redunduncies,
+- Add required syntax to the `action.yaml` file to publish on the Marketplace
+- Edit latest release to publish it
+  - Fix any marketplace publication errors
+  - Choose one or two categories as you want (not relevant to this lab)
+- Search for your action on the Marketplace
 
-- Remove unneccessary link between job
-- Introduce a matrix to replace the duplication of code
+## Test it
 
-## Extract code to a reusable worklow
+Create a new workflow `testing-workflow.yaml` to test your action from an user point of view
+  
+  ```yaml
+  name: Testing your public action
+  on: push
+  jobs:
+    testing:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: you/your-action@v1.x.x
+  ```
 
-> One team of your entreprise want to copy your workflow to validate its documentation.
-
-Split the configuration of the documentation validation from the documentation validation itself.
-
-- The reusable workflow take as input the directory to check
-
-This way, the team and yours will share the same process without duplication
-
-## Extract lint into a action
-
-> Another team want to check its documentation markdown but not in the same process as yours.
-
-Extract the markdown lint process into an action named `markdown-linter`
-
-- The action take as input the directory to lint
-- The action output the linter report without transformation
-- The reusable workflow use the action instead of the markdown lint step
-- The reusable workflow use the report to prepare the comment message
-
-This way, any team can check markdown file and act on it in theirs own way.
+## Teardown
+  
+⚠️ Do not forget to `unpublish` this action at the end of the Lab.
 
 ## Finish
 
-- `workflow.yaml` will run and validate the markdown of the documentation sections in parallel.
+`release-workflow.yaml` will run and generate a new release based on the commit history.
 
-  ![finish result](../assets/images/testing-lab1-finish-result.png)
+![finish result](../assets/images/lifecycle-lab1-finish-result.png)
 
-- `reusable-workflow.yaml` will be reusable by other teams with the same process.
-- `markdown-linter` action will be usable by other teams with a different process.
-
-Use the `workflow.yaml`, the `reusable-workflow.yaml`, and the `action.yaml` from the [solution](https://github.com/sfeir-open-source/sfeir-school-github-action-dev/tree/main/steps/40-reuse-lab1-maintainability-solution) to compare it with your solution.
+Use the `release-workflow.yaml`, the `.releaserc`, and the `action.yaml` from the [solution](https://github.com/sfeir-open-source/sfeir-school-github-action-dev/tree/main/steps/50-lifecycle-lab1-marketplace-solution) to compare it with your solution.
