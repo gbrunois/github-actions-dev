@@ -1,12 +1,10 @@
-# Lab 1
+# Lab 2
 
-Test **shell** scripts using **bats**.
+Test an **Action** using a GitHub Action **workflow**.
 
 ## Tips
 
-- Github Action syntax for [Runs](https://docs.github.com/en/actions/creating-actions/creating-a-composite-action) in Composite action
-- [actions/checkout](https://github.com/actions/checkout) documentation
-- bats [manual page](https://bats-core.readthedocs.io/en/stable/writing-tests.html#libraries-and-add-ons)
+- [test](https://www.man-linux-magique.net/man1/test.html) command
 
 ## Setup
 
@@ -14,40 +12,37 @@ Create a repository with the content of this folder.
 
 `testing-workflow.yaml` will run and do **nothing** (yet).
 
-![setup result](../assets/images/testing-lab1-setup-result.png)
+![setup result](../assets/images/testing-lab2-setup-result.png)
 
-## Run the tests
+## Steps
 
-- Setup `bats`, `bats-assert`, and `bats-support` as git submodules
-  
-  ```shell
-  git submodule add https://github.com/bats-core/bats-core.git tests/bats
-  git submodule add https://github.com/bats-core/bats-assert.git tests/test_helper/bats-assert
-  git submodule add https://github.com/bats-core/bats-support.git tests/test_helper/bats-support
-  ```
+- Create a repository
+- Add the file `release-workflow.yml` which will serve you to run the lab
+- update `testing-workflow.yml` to test that our action output the following value : 
+  - `4 + 5` equals 9 
+  - `ab` + `cd` equals 0
+  - the hello-world script return `Hello World!`
+  - `kayak` is a palindrome 
+  - `foo` is not a palindrome 
 
-- Make `testing-workflow.yaml` load the git submodules
-- Run the `lab-tests.bats` file using `bats` from the `testing-workflow.yaml`
+## Test the addition part
 
-## Test the addition script
+- Run the action to add `4` to `5` and test the `addition` output to be equals to `9`
+- Run the action to add `ab` to `bc` and test that the action run have fail
 
-- Add a test that check if `addition.sh` is working : 5 + 5 eq 10
-- Add a test that check if `addition.sh` is working : missing arg throw an error
-- Add a test that check if `addition.sh` is working : returned exit code is `3`
+## Test the hello-world part
 
-## Test the hello-world script
+- Run the action and test the `hello world` output to be equals to `Hello World!`
 
-- Add a test that check if `hello-world.sh` print at least `Hello` and not `Hola`
+## Test the palindrome part
 
-## Test the palindrome script
-
-- Add a test that check if `palindrome.sh` is not error with the word `kayak` and the output contains : `is a palindrome`
-- Add a test that check if `palindrome.sh` end with the word `palindrome` with a regex
+- Run the action with `kayak` and test the `palindrome` output to be equals to `kayak is a palindrome`
+- Run the action with `foo` and test the `palindrome` output to be equals to `foo is not a palindrome`
 
 ## Finish
 
-`testing-workflow.yaml` will run the 6 tests without failure.
+`testing-workflow.yaml` will run the 5 tests without failure and display a warning for the `error` test case
 
-![finish result](../assets/images/testing-lab1-finish-result.png)
+![finish result](../assets/images/testing-lab2-finish-result.png)
 
-Use the `testing-workflow.yaml` and the `lab-tests.bats` from the [solution](https://github.com/sfeir-open-source/sfeir-school-github-action-dev/tree/main/steps/30-testing-lab1-action-shell-testing-solution) to compare it with your solution.
+Use the `testing-workflow.yaml` from the [solution](https://github.com/sfeir-open-source/sfeir-school-github-action-dev/tree/main/steps/30-testing-lab2-action-workflow-testing-solution) to compare it with your solution.
