@@ -1,17 +1,15 @@
-name: 'Syntax:Lab1'
-description: 'Action of Lab1 in Syntax section'
+name: 'Syntax:Lab2'
+description: 'Action of Lab2 in Syntax section'
 inputs:
-  say:
-    description: say
+  text:
+    description: text
     required: true
-  eyes:
-    description: eyes
-    required: false
-    default: oo
 runs:
-  using: 'docker'
-  image: 'docker://rancher/cowsay:latest'
-  args:
-    - -e
-    - ${{ inputs.eyes }}
-    - ${{ inputs.say }}
+  using: 'composite'
+  steps:
+    - id: upper_step
+      run: |
+        echo "${INPUT_TEXT^^}"
+      env:
+        INPUT_TEXT: ${{ inputs.text }}
+      shell: bash
