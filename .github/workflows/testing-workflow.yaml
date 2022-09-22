@@ -10,5 +10,5 @@ jobs:
 
       - name: bats test
         run: |
-          ${GITHUB_WORKSPACE}/tests/bats/bin/bats ${GITHUB_WORKSPACE}/lab-tests.bats
+          ${GITHUB_WORKSPACE}/tests/bats/bin/bats ${GITHUB_WORKSPACE}/tests/lab-tests.bats
         shell: bash
