@@ -13,7 +13,7 @@ setup() {
 
 @test "missing arf" {
   run addition.sh 5
-  assert_output "missing arg throw an error"
+  assert_output "command line arguments are missing"
 }
 
 @test "failure" {
