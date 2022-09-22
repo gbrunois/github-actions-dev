@@ -1,19 +1,5 @@
-name: 'Syntax:Lab2'
-description: 'Action of Lab2 in Syntax section'
-inputs:
-  text:
-    description: text
-    required: true
-outputs:
-  upper_text:
-    description: text
-    value: ${{ steps.upper_step.outputs.upper_text }}
+name: "Interactions:Lab1"
+description: "Action of Lab1 in Interactions section"
 runs:
-  using: 'composite'
-  steps:
-    - id: upper_step
-      run: |
-        echo "::set-output name=upper_text::${INPUT_TEXT^^})"
-      env:
-        INPUT_TEXT: ${{ inputs.text }}
-      shell: bash
+  using: "node16"
+  main: "dist/index.js"
