@@ -36,6 +36,7 @@ files.forEach(file => {
     fs.accessSync(path.join(path.dirname(file), 'package-lock.json'));
   } catch (err) {
     // File don't exists
+    
   }
 });
 ```
