@@ -10,3 +10,13 @@ setup() {
   run addition.sh 5 5
   assert_output 10
 }
+
+@test "this is a test" {
+  run addition.sh
+  assert_output "missing arg throw an error"
+}
+
+@test "this is a test" {
+  run addition.sh 3
+  assert_output 3
+}
