@@ -1,0 +1,71 @@
+on:
+  workflow_call:
+    inputs:
+      dir:
+        required: true
+        type: string
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Linter installation
+        run: |
+          npm install -g markdownlint-cli
+        shell: bash
+
+      - name: Print markdownlint version
+        run: |
+          echo $(markdownlint -V)
+        shell: bash
+
+      - name: Lint the section markdown
+        continue-on-error: true
+        run: |
+          markdownlint ${{ inputs.dir }}/*.md -o tmp.txt
+        shell: bash
+        with:
+          dir: ${{ inputs.dir }}
+
+      - name: Format result
+        id: format-result
+        uses: actions/github-script@v6
+        with:
+          github-token: $GITHUB_TOKEN
+          result-encoding: string
+          script: |
+            const fs = require('fs').promises;
+            var reportBulk = (await fs.readFile("tmp.txt")).toString();
+            const output = `### Lint 📖
+            <details>
+            \`\`\`
+            `+reportBulk+`
+            \`\`\`
+            </details>`
+            return output;
+
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: "github-actions[bot]"
+          body-includes: ${{ inputs.dir }}
+
+      - name: Create comment
+        if: steps.fc.outputs.comment-id == ''
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ## ${{ inputs.dir }}
+            ${{ steps.format-result.outputs.result }}
+
+      - name: Update comment
+        if: steps.fc.outputs.comment-id != ''
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          body: |
+            ## ${{ inputs.dir }}
+            ${{ steps.format-result.outputs.result }}
+          edit-mode: replace
