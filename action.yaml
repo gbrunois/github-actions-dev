@@ -4,12 +4,16 @@ inputs:
   text:
     description: text
     required: true
+outputs:
+  upper_text:
+    description: text
+    value: ${{ steps.upper_step.outputs.upper_text }}
 runs:
   using: 'composite'
   steps:
     - id: upper_step
       run: |
-        echo "${INPUT_TEXT^^}"
+        echo "::set-output name=upper_text:${INPUT_TEXT^^})"
       env:
         INPUT_TEXT: ${{ inputs.text }}
       shell: bash
