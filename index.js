@@ -18,7 +18,7 @@ async function run() {
         // File don't exists
         core.warning('Consider to generate it and commit it', {
           title: "Missing package-lock.json",
-          file: file
+          file: f
         });
       }
     }
