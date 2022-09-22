@@ -11,9 +11,9 @@ async function run() {
     const globber = await glob.create(patterns.join('\n'))
     const files = await globber.glob()
 
-    files.forEach(file => {
+    async function handleFile(f) {
       try {
-        fs.accessSync(path.join(path.dirname(file), 'package-lock.json'));
+        await fs.access(path.join(path.dirname(f), 'package-lock.json'));
       } catch (err) {
         // File don't exists
         core.warning('Consider to generate it and commit it', {
@@ -21,7 +21,10 @@ async function run() {
           file: file
         });
       }
-    });
+    }
+
+
+    await files.forEach(file => await handleFile);
   }
   catch (error) {
     core.setFailed(error.message);
